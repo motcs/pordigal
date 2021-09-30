@@ -1,8 +1,8 @@
-package com.prodigal.home;
+package com.prodigal;
 
-import com.prodigal.home.security.role.Role;
-import com.prodigal.home.security.user.User;
-import com.prodigal.home.security.user.UserService;
+import com.prodigal.security.role.Role;
+import com.prodigal.security.user.User;
+import com.prodigal.security.user.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,15 +13,21 @@ import java.util.ArrayList;
 
 /**
  * @author jjh
- * @classname HomeApplication
+ * @classname ProdigalApplication
  * @date 2021/9/29 create
  */
 @SpringBootApplication
-public class HomeApplication {
+public class ProdigalApplication {
     public static void main(String[] args) {
-        SpringApplication.run(HomeApplication.class, args);
+        SpringApplication.run(ProdigalApplication.class, args);
     }
 
+    /**
+     * 初始化角色以及角色权限
+     *
+     * @param userService 服务
+     * @return 返回值不管
+     */
     @Bean
     CommandLineRunner runner(UserService userService) {
         return args -> {

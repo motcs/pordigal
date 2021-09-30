@@ -1,6 +1,6 @@
-package com.prodigal.home.security.user;
+package com.prodigal.security.user;
 
-import com.prodigal.home.security.role.Role;
+import com.prodigal.security.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

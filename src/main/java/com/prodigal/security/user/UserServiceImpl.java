@@ -1,9 +1,8 @@
-package com.prodigal.home.security.user;
+package com.prodigal.security.user;
 
-import com.prodigal.home.security.role.Role;
-import com.prodigal.home.security.role.RoleRepo;
+import com.prodigal.security.role.Role;
+import com.prodigal.security.role.RoleRepo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

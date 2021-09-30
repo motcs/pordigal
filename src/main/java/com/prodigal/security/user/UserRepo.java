@@ -1,4 +1,4 @@
-package com.prodigal.home.security.user;
+package com.prodigal.security.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

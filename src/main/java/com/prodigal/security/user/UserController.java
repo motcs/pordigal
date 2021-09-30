@@ -1,7 +1,7 @@
-package com.prodigal.home.security.user;
+package com.prodigal.security.user;
 
-import com.prodigal.home.security.entity.RoleToUserFrom;
-import com.prodigal.home.security.role.Role;
+import com.prodigal.security.entity.RoleToUserFrom;
+import com.prodigal.security.role.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

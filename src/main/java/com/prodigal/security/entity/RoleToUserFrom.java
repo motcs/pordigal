@@ -1,4 +1,4 @@
-package com.prodigal.home.security.entity;
+package com.prodigal.security.entity;
 
 import lombok.Data;
 

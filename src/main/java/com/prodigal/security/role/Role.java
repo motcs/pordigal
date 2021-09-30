@@ -1,4 +1,4 @@
-package com.prodigal.home.security.role;
+package com.prodigal.security.role;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
