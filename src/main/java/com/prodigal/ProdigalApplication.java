@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,13 +24,19 @@ public class ProdigalApplication {
         SpringApplication.run(ProdigalApplication.class, args);
     }
 
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
     /**
      * 初始化角色以及角色权限
      *
      * @param userService 服务
      * @return 返回值不管
      */
-    @Bean
+//    @Bean
     CommandLineRunner runner(UserService userService) {
         return args -> {
             //用户权限
