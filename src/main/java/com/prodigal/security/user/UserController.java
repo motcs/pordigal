@@ -67,9 +67,15 @@ public class UserController {
 
     @PostMapping("/role/to/user")
     public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserFrom from) {
+        for (Role role : userService.getUser(from.getUsername()).getRoles()) {
+            if (role.getName().equals(from.getRoleName())) {
+                throw new RuntimeException("很抱歉该用户已有此权限，权限不可以重复添加！");
+            }
+        }
         this.userService.addRoleToUser(from.getUsername(), from.getRoleName());
         return ResponseEntity.ok().build();
     }
+
 
     /**
      * 刷新token接口

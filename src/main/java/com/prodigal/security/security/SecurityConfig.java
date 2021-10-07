@@ -58,7 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //设置权限对应的规则,这只用户权限访问路径
         http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
         //设置添加用户权限为管理员权限
-        http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROlE_ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/role/**").hasAnyAuthority("ROLE_ADMIN");
 
         //必须通过上边的权限验证之后才可以继续执行下面的内容
         http.authorizeRequests().anyRequest().authenticated();
