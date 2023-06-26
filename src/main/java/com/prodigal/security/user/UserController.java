@@ -86,7 +86,7 @@ public class UserController {
     @GetMapping("/refresh/token")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        log.info("开始验证权限是否符合书写规则！");
+        log.info("开始验证权限是否符合书写规则");
         if (authorizationHeader != null && authorizationHeader.startsWith("Prodigal ")) {
             try {
                 log.info("权限验证通过，开始删除自定义权限头");
