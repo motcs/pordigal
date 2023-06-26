@@ -36,7 +36,7 @@ public class ProdigalApplication {
      * @param userService 服务
      * @return 返回值不管
      */
-//    @Bean
+    @Bean
     CommandLineRunner runner(UserService userService) {
         return args -> {
             //用户权限

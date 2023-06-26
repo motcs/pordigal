@@ -24,20 +24,24 @@ import static javax.persistence.FetchType.EAGER;
 @AllArgsConstructor
 @Entity(name = "prodigal_user")
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
+
     private String username;
+
     private String password;
 
     @ManyToMany(fetch = EAGER)
-    private Collection<Role> roles = new ArrayList<>();
+    private Collection<Role> role = new ArrayList<>();
 
     @CreatedBy
-    private LocalDateTime createTime;
+    private LocalDateTime createdTime;
+
     @LastModifiedBy
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedTime;
 
 }

@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         //创建权限集合
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         //循环将用户权限放入权限表
-        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        user.getRole().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
         //返回赋加权限后的用户信息
         return new org.springframework
                 .security.core.userdetails
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("开始为用户赋值权限username:{},roleName:{}", username, roleName);
         User user = userRepo.findByUsername(username);
         Role role = roleRepo.findByName(roleName);
-        user.getRoles().add(role);
+        user.getRole().add(role);
     }
 
     @Override

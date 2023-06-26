@@ -67,7 +67,7 @@ public class UserController {
 
     @PostMapping("/role/to/user")
     public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserFrom from) {
-        for (Role role : userService.getUser(from.getUsername()).getRoles()) {
+        for (Role role : userService.getUser(from.getUsername()).getRole()) {
             if (role.getName().equals(from.getRoleName())) {
                 throw new RuntimeException("很抱歉该用户已有此权限，权限不可以重复添加！");
             }
@@ -107,7 +107,7 @@ public class UserController {
                         .withSubject(user.getUsername())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURI())
-                        .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                        .withClaim("roles", user.getRole().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>(4);
                 tokens.put("access_token", accessToken);

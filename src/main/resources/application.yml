@@ -4,15 +4,15 @@ spring:
   application:
     name: motcs-service
   datasource:
-    url: jdbc:mysql://rm-bp18ssz7na7r97755uo.mysql.rds.aliyuncs.com:8125/work?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false&serverTimezone=GMT%2B8&verifyServerCertificate=false&autoReconnct=true&autoReconnectForPools=true&allowMultiQueries=true
+    url: jdbc:mysql://123.249.196.217:3306/motcs?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&useSSL=false&serverTimezone=GMT%2B8&verifyServerCertificate=false&autoReconnct=true&autoReconnectForPools=true&allowMultiQueries=true
     hikari:
-      username: motcs
-      password: Sx20110427Nsyy081221
+      username: root
+      password: sx2011++
       driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
