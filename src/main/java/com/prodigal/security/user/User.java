@@ -1,13 +1,14 @@
 package com.prodigal.security.user;
 
+import com.prodigal.security.entity.BaseEntity;
 import com.prodigal.security.role.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.LastModifiedBy;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,15 +16,15 @@ import java.util.Collection;
 import static javax.persistence.FetchType.EAGER;
 
 /**
- * @author jjh
- * @classname User
- * @date 2021/9/29 create
+ * @author <a href="https://github.com/motcs">motcs</a>
+ * @since 2023-06-26 星期一
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(title = "用户表")
 @Entity(name = "prodigal_user")
-public class User {
+public class User implements Serializable, BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,15 +34,17 @@ public class User {
 
     private String username;
 
+    private String phone;
+
+    private String avatar;
+
     private String password;
 
     @ManyToMany(fetch = EAGER)
     private Collection<Role> role = new ArrayList<>();
 
-    @CreatedBy
     private LocalDateTime createdTime;
 
-    @LastModifiedBy
     private LocalDateTime updatedTime;
 
 }

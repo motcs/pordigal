@@ -27,18 +27,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 /**
  * 认证管理器
  *
- * @author jjh
- * @classname CustomAuthenticationFilter
- * @date 2021/10/6 create
+ * @author <a href="https://github.com/motcs">motcs</a>
+ * @since 2023-06-26 星期一
  */
 @Log4j2
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     private final AuthenticationManager authenticationManager;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -72,7 +71,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String accessToken = JWT.create()
                 //传入主题，使用用户的登录名
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
                 .withIssuer(request.getRequestURI())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
@@ -80,14 +79,14 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String refreshToken = JWT.create()
                 //传入主题，使用用户的登录名
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 90 * 60 * 1000))
                 .withIssuer(request.getRequestURI())
                 .sign(algorithm);
         Map<String, String> tokens = new HashMap<>(4);
-        tokens.put("access_token", accessToken);
+        tokens.put("token", accessToken);
         tokens.put("refresh_token", refreshToken);
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-
     }
+
 }

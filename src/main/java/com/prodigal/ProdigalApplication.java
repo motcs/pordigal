@@ -1,6 +1,7 @@
 package com.prodigal;
 
 import com.prodigal.security.role.Role;
+import com.prodigal.security.role.RoleService;
 import com.prodigal.security.user.User;
 import com.prodigal.security.user.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -14,12 +15,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
- * @author jjh
- * @classname ProdigalApplication
- * @date 2021/9/29 create
+ * @author <a href="https://github.com/motcs">motcs</a>
+ * @since 2023-06-26 星期一
  */
 @SpringBootApplication
 public class ProdigalApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(ProdigalApplication.class, args);
     }
@@ -29,39 +30,33 @@ public class ProdigalApplication {
         return new BCryptPasswordEncoder();
     }
 
-
     /**
      * 初始化角色以及角色权限
      *
      * @param userService 服务
      * @return 返回值不管
      */
-    @Bean
-    CommandLineRunner runner(UserService userService) {
+//    @Bean
+    CommandLineRunner runner(UserService userService, RoleService roleService) {
         return args -> {
             //用户权限
-            userService.saveRole(new Role(null, "ROLE_USER"));
-            //游客权限
-            userService.saveRole(new Role(null, "ROLE_TOURIST"));
+            roleService.operation(new Role(null, "ROLE_USER", "普通用户"));
             //会员权限
-            userService.saveRole(new Role(null, "ROLE_MEMBER"));
+            roleService.operation(new Role(null, "ROLE_MEMBER", "会员"));
             //管理员
-            userService.saveRole(new Role(null, "ROLE_ADMIN"));
+            roleService.operation(new Role(null, "ROLE_ADMIN", "管理员"));
             //超级管理员
-            userService.saveRole(new Role(null, "ROLE_SUPER_ADMIN"));
+            roleService.operation(new Role(null, "ROLE_SUPER_ADMIN", "超级管理员"));
 
-            userService.saveUser(new User(null, "靳家航", "jjh", "1234", new ArrayList<>(), LocalDateTime.now(), LocalDateTime.now()));
-            userService.saveUser(new User(null, "李太行", "lth", "1234", new ArrayList<>(), LocalDateTime.now(), LocalDateTime.now()));
+            userService.saveUser(new User(null, "靳家航", "jjh",
+                    "15738374392", "http://123.249.96.217:8001/photo/feifei.png",
+                    "1234", new ArrayList<>(), LocalDateTime.now(), LocalDateTime.now()));
             //靳家航账号赋值权限
             userService.addRoleToUser("jjh", "ROLE_USER");
             userService.addRoleToUser("jjh", "ROLE_MEMBER");
             userService.addRoleToUser("jjh", "ROLE_ADMIN");
             userService.addRoleToUser("jjh", "ROLE_SUPER_ADMIN");
-            //李太行账号赋值权限
-            userService.addRoleToUser("lth", "ROLE_USER");
-            userService.addRoleToUser("lth", "ROLE_MEMBER");
-            userService.addRoleToUser("lth", "ROLE_ADMIN");
-            userService.addRoleToUser("lth", "ROLE_SUPER_ADMIN");
         };
     }
+
 }

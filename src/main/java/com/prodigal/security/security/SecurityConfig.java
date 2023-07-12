@@ -11,25 +11,23 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 /**
- * @author jjh
- * @classname SecurityConfig
- * @date 2021/10/6 create
+ * @author <a href="https://github.com/motcs">motcs</a>
+ * @since 2023-06-26 星期一
  */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsService userDetailsService;
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
 
     /**
      * 实现登录控制
@@ -40,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder);
+                .passwordEncoder(passwordEncoder);
     }
 
     @Override
@@ -49,21 +47,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter customAuthenticationFilter =
                 new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
-
         http.csrf().disable();
         //管理会话创建策略 ->设置为 无状态
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         //允许所有人的登录请求进入
         http.authorizeRequests().antMatchers("/api/login/**", "/api/refresh/token/**").permitAll();
+        http.authorizeRequests().antMatchers(POST, "/api/register/**").permitAll();
         //设置权限对应的规则,这只用户权限访问路径
-        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
+//        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
         //设置添加用户权限为管理员权限
-        http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
-        http.authorizeRequests().antMatchers(POST, "/api/role/**").hasAnyAuthority("ROLE_ADMIN");
+//        http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+//        http.authorizeRequests().antMatchers(POST, "/api/role/**").hasAnyAuthority("ROLE_ADMIN");
 
-        //必须通过上边的权限验证之后才可以继续执行下面的内容
+        // 必须通过上边的权限验证之后才可以继续执行下面的内容
         http.authorizeRequests().anyRequest().authenticated();
-//        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
+        // http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 

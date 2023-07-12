@@ -1,7 +1,8 @@
 package com.prodigal.security.user;
 
+import com.prodigal.annotation.RestServerException;
 import com.prodigal.security.role.Role;
-import com.prodigal.security.role.RoleRepo;
+import com.prodigal.security.role.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -17,17 +19,17 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author jjh
- * @classname UserServiceImpl
- * @date 2021/9/29 create
+ * @author <a href="https://github.com/motcs">motcs</a>
+ * @since 2023-06-26 星期一
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(rollbackOn = Exception.class)
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private final UserRepo userRepo;
-    private final RoleRepo roleRepo;
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             log.error("没有该用户！");
             throw new UsernameNotFoundException("没有该用户!");
@@ -58,36 +60,48 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User saveUser(User user) {
-        log.info("开始保存用户{}", user);
-        //加密密码
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+        if (user.isNew()) {
+            log.info("开始保存用户{}", user);
+            //加密密码
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        }
+        return userRepository.saveAndFlush(user);
     }
 
     @Override
-    public Role saveRole(Role role) {
-        log.info("开始保存权限{}", role);
-        return roleRepo.save(role);
+    public User register(User user) {
+        if (user.isNew()) {
+            log.info("开始保存用户{}", user);
+            User byUsername = this.userRepository.findByUsername(user.getUsername());
+            if (ObjectUtils.isEmpty(byUsername)) {
+                //加密密码
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                return userRepository.save(user);
+            }
+            throw RestServerException.withMsg("当前用户名已被注册");
+        }
+        throw RestServerException.withMsg("注册接口，不允许修改用户信息");
     }
 
     @Override
     public void addRoleToUser(String username, String roleName) {
         log.info("开始为用户赋值权限username:{},roleName:{}", username, roleName);
-        User user = userRepo.findByUsername(username);
-        Role role = roleRepo.findByName(roleName);
+        User user = userRepository.findByUsername(username);
+        Role role = roleRepository.findByName(roleName);
         user.getRole().add(role);
     }
 
     @Override
     public User getUser(String username) {
         log.info("查询用户：{}", username);
-        return userRepo.findByUsername(username);
+        return userRepository.findByUsername(username);
     }
 
     @Override
     public List<User> getUsers() {
         log.info("查询所有用户");
-        return userRepo.findAll();
+        return userRepository.findAll();
     }
 
 

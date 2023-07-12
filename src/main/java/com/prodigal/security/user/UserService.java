@@ -1,13 +1,10 @@
 package com.prodigal.security.user;
 
-import com.prodigal.security.role.Role;
-
 import java.util.List;
 
 /**
- * @author jjh
- * @classname UserService
- * @date 2021/9/29 create
+ * @author <a href="https://github.com/motcs">motcs</a>
+ * @since 2023-06-26 星期一
  */
 public interface UserService {
     /**
@@ -19,12 +16,12 @@ public interface UserService {
     User saveUser(User user);
 
     /**
-     * 保存权限
+     * 注册用户
      *
-     * @param role 权限信息
-     * @return 返回添加的权限
+     * @param user 用户信息
+     * @return 返回用户信息
      */
-    Role saveRole(Role role);
+    User register(User user);
 
     /**
      * 根据权限名给用户赋权限
