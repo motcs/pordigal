@@ -54,13 +54,18 @@ public class ConversionNumberUtil {
             }
             if (integer >= 10) {
                 if (index != 0) {
-                    temp = temp * integer;
+                    // 此处修改于2023-08-09，csdn网友提出bug
+                    if (temp != 0) {
+                        temp = temp * integer;
+                    } else {
+                        temp = integer;
+                    }
                 } else {
                     temp = integer;
                 }
             } else {
                 // 如果下一个数字是单位，下一个不是最后一个时，此时临时 变量直接 + 当前位数字 * 下一位单位
-                if (collect.get(index + 1) >= 10 && index + 2 < collect.size()) {
+                if (index + 2 < collect.size() && collect.get(index + 1) >= 10) {
                     temp += integer * collect.get(index + 1);
                     isTemp2 = true;
                 } else {
@@ -81,9 +86,8 @@ public class ConversionNumberUtil {
      */
     private static boolean isChineseNum(String chineseStr) {
         char[] ch = chineseStr.toCharArray();
-        String allChineseNum = "零一二三四五六七八九十百千万亿";
         for (char c : ch) {
-            if (!allChineseNum.contains(String.valueOf(c))) {
+            if (!CHINESE_NUMBER.contains(String.valueOf(c))) {
                 return false;
             }
         }
@@ -91,7 +95,7 @@ public class ConversionNumberUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(convertNumber("二十八万"));
+        System.out.println(convertNumber("十一"));
     }
 
 }
